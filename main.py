@@ -56,7 +56,7 @@ def is_mentioned(message):
 # Обработчик входящих сообщений
 @app.on_message(filters.text & (filters.create(allowed_chat) | filters.private))
 def auto_reply(client, message):
-    if (message.reply_to_message and message.reply_to_message.from_user.is_self) | filters.private:
+    if (message.reply_to_message and message.reply_to_message.from_user.is_self) or filters.private:
         text = re.sub(r'[^\w\s]', '', message.text).lower()
         print(f"\033[94mПолучен ответ от пользователя:\033[0m {message.from_user.first_name} ({message.from_user.id})")
         print(f"\033[94mВ чате:\033[0m {message.chat.title} ({message.chat.id})")
