@@ -68,7 +68,7 @@ def auto_reply(client, message):
         print(f"\033[95mОтвет:\033[0m {response}")
         message.reply(response)
         print("=" * 50)
-    elif message.chat.type == 'private' or is_mentioned(message):
+    elif filters.private or is_mentioned(message):
         text = re.sub(r'[^\w\s]', '', message.text).lower()
         print(f"\033[96mПользователь:\033[0m {message.from_user.first_name} ({message.from_user.id})")
         print(f"\033[96mВ чате:\033[0m {message.chat.title} ({message.chat.id})")
