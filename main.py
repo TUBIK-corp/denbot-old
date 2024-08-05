@@ -14,7 +14,7 @@ app = Client("my_account", api_id=config['api_id'], api_hash=config['api_hash'])
 
 # Фильтр для проверки, находится ли чат в списке разрешенных
 def allowed_chat(_, __, message):
-    return message.chat.id in config['allowed_chats'] or message.chat.type == 'private'
+    return message.chat.id in config['allowed_chats']
 
 # Загрузка датасета
 with open(config['dataset_path'], 'r', encoding='utf-8') as f:
@@ -54,7 +54,7 @@ def is_mentioned(message):
     return False
 
 # Обработчик входящих сообщений
-@app.on_message(filters.text & filters.create(allowed_chat))
+@app.on_message(filters.text & (filters.create(allowed_chat) | filters.private))
 def auto_reply(client, message):
     if message.reply_to_message and message.reply_to_message.from_user.is_self:
         text = re.sub(r'[^\w\s]', '', message.text).lower()
