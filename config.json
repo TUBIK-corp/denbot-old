@@ -3,5 +3,6 @@
     "api_hash": "",
     "allowed_chats": [],
     "dataset_path": "DenvotReplics.txt",
-    "bot_names": ["денвот", "пупс денвот", "денвопс", "дениска", "денис", "denvot"]
+    "bot_names": ["денвот", "пупс денвот", "денвопс", "дениска", "денис", "denvot"],
+    "name_match_threshold": 0.7
 }
