@@ -2,5 +2,6 @@
     "api_id": "",
     "api_hash": "",
     "allowed_chats": [],
-    "dataset_path": "DenvotReplics.txt"
+    "dataset_path": "DenvotReplics.txt",
+    "bot_names": ["денвот", "пупс денвот", "денвопс", "дениска", "денис", "denvot"]
 }

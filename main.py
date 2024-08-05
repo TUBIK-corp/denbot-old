@@ -37,14 +37,30 @@ for trigger, response in dataset:
 def similarity(a, b):
     return SequenceMatcher(None, a, b).ratio()
 
+# Функция для проверки, упоминается ли бот в сообщении
+def is_mentioned(message):
+    bot_names = config['bot_names']
+    text = message.text.lower()
+    for name in bot_names:
+        if name in text:
+            return True
+    return False
+
 # Обработчик входящих сообщений
 @app.on_message(filters.text & filters.create(allowed_chat))
 def auto_reply(client, message):
-    text = re.sub(r'[^\w\s]', '', message.text).lower()
-    print(f"Получено сообщение: {message.text}")
-    best_match = max(responses.keys(), key=lambda x: similarity(text, x))
-    response = random.choice(responses[best_match])
-    message.reply(response)
+    if message.reply_to_message and message.reply_to_message.from_user.is_self:
+        text = re.sub(r'[^\w\s]', '', message.text).lower()
+        print(f"Получен ответ: {message.text}")
+        best_match = max(responses.keys(), key=lambda x: similarity(text, x))
+        response = random.choice(responses[best_match])
+        message.reply(response)
+    elif is_mentioned(message):
+        text = re.sub(r'[^\w\s]', '', message.text).lower()
+        print(f"Получено сообщение с упоминанием: {message.text}")
+        best_match = max(responses.keys(), key=lambda x: similarity(text, x))
+        response = random.choice(responses[best_match])
+        message.reply(response)
 
 # Запуск клиента
 app.run()
