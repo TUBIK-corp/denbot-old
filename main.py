@@ -56,7 +56,7 @@ def is_mentioned(message):
 # Обработчик входящих сообщений
 @app.on_message(filters.text & (filters.create(allowed_chat) | filters.private))
 def auto_reply(client, message):
-    if (message.reply_to_message and message.reply_to_message.from_user.is_self) or filters.private:
+    if message.reply_to_message and message.reply_to_message.from_user.is_self:
         text = re.sub(r'[^\w\s]', '', message.text).lower()
         print(f"\033[94mПолучен ответ от пользователя:\033[0m {message.from_user.first_name} ({message.from_user.id})")
         print(f"\033[94mВ чате:\033[0m {message.chat.title} ({message.chat.id})")
@@ -68,7 +68,7 @@ def auto_reply(client, message):
         print(f"\033[95mОтвет:\033[0m {response}")
         message.reply(response)
         print("=" * 50)
-    elif is_mentioned(message):
+    elif message.chat.type == 'private' or is_mentioned(message):
         text = re.sub(r'[^\w\s]', '', message.text).lower()
         print(f"\033[96mПользователь:\033[0m {message.from_user.first_name} ({message.from_user.id})")
         print(f"\033[96mВ чате:\033[0m {message.chat.title} ({message.chat.id})")
