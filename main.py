@@ -40,10 +40,13 @@ def similarity(a, b):
 # Функция для проверки, упоминается ли бот в сообщении
 def is_mentioned(message):
     bot_names = config['bot_names']
-    text = message.text.lower()
-    for name in bot_names:
-        if name in text:
-            return True
+    text = re.sub(r'[^\w\s]', '', message.text).lower().split()
+    for word in text:
+        for name in bot_names:
+            if similarity(name, word) > 0.8:
+                print(f"\033[93mИмя бота найдено по проценту сходства:\033[0m {name}, \033[92mпроцент сходства:\033[0m {similarity(name, word) * 100:.2f}%")
+                return True
+    print("\033[91mИмя бота не найдено в сообщении\033[0m")
     return False
 
 # Обработчик входящих сообщений
@@ -51,14 +54,18 @@ def is_mentioned(message):
 def auto_reply(client, message):
     if message.reply_to_message and message.reply_to_message.from_user.is_self:
         text = re.sub(r'[^\w\s]', '', message.text).lower()
-        print(f"Получен ответ: {message.text}")
+        print(f"\033[94mПолучен ответ:\033[0m {message.text}")
         best_match = max(responses.keys(), key=lambda x: similarity(text, x))
+        match_percent = similarity(text, best_match) * 100
+        print(f"\033[92mПроцент совпадения:\033[0m {match_percent:.2f}%")
         response = random.choice(responses[best_match])
         message.reply(response)
     elif is_mentioned(message):
         text = re.sub(r'[^\w\s]', '', message.text).lower()
-        print(f"Получено сообщение с упоминанием: {message.text}")
+        print(f"\033[94mПолучено сообщение с упоминанием:\033[0m {message.text}")
         best_match = max(responses.keys(), key=lambda x: similarity(text, x))
+        match_percent = similarity(text, best_match) * 100
+        print(f"\033[92mПроцент совпадения:\033[0m {match_percent:.2f}%")
         response = random.choice(responses[best_match])
         message.reply(response)
 
